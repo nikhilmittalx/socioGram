@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Feed from "../Feed";
 import Topbar from "../Topbar";
 
-// import "react-notifications/lib/notifications.css";
 import Rightbarr from "../Rightbarr";
 
 function Home() {

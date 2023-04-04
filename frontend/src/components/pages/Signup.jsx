@@ -3,12 +3,14 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import "./signup.css"
-import { signUp } from "../../actions/userAction";
+import { clearErrors, signUp } from "../../actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const alert = useAlert();
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -17,7 +19,7 @@ function Signup() {
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState("https://res.cloudinary.com/doqgoey64/image/upload/v1680349229/avatars/defaultavatar_mvfh3w.png");
 
-  const { isAuthenticated } = useSelector((state)=>state.user)
+  const { isAuthenticated, error } = useSelector((state)=>state.user)
 
   const avatarHandler = (e) =>{
     const file = e.target.files[0];
@@ -38,11 +40,14 @@ function Signup() {
   };
 
   useEffect(()=>{
-    
+    if(error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
     if(isAuthenticated){
       navigate("/")
     }
-  }, [navigate, isAuthenticated, dispatch])
+  }, [navigate, isAuthenticated, dispatch, error])
 
 
   return (
@@ -69,7 +74,7 @@ function Signup() {
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
-                  placeholder="Username"
+                  placeholder="Email"
                   type="email"
                   required
                   className="signupInput"

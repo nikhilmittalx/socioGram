@@ -13,10 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers, getMyPosts, loadUser, logout } from "../actions/userAction";
 import { Button, Dialog, Typography } from "@mui/material";
 import { createNewPost } from "../actions/postAction";
+import { useAlert } from "react-alert";
 
 function Topbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const alert = useAlert();
 
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
@@ -47,14 +49,11 @@ function Topbar() {
       console.log(error);
       dispatch({ type: "clearErrors" });
     }
-
     if (message) {
-    console.log(message);
+      console.log(message);
       dispatch({ type: "clearMessage" });
     }
   }, [dispatch, error, message]);
-
-
 
 
   const { user } = useSelector((state) => state.user);
@@ -70,7 +69,9 @@ function Topbar() {
   const { users } = useSelector((state) => state.allUsers);
 
   const logoutHandler = async () => {
+
     dispatch(logout());
+    alert.success("logged out")
     navigate("/login");
   };
 

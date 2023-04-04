@@ -67,7 +67,7 @@ export const createNewPost = (caption, image) => async(dispatch) => {
     } catch (error) {
         dispatch({
             type:"newPostFailure",
-            payload: error
+            payload: error.response.data.message
         })
     }
 }

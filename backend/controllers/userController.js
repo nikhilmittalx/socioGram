@@ -10,19 +10,28 @@ const Post = require("../models/postModel");
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
     const { name, email, password, avatar } = req.body;
+
+    let user = await User.findOne({ email });
+    if (user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
+    }
+    if(password.length<8){
+        return res
+        .status(400)
+        .json({ success: false, message: "Password must be atleast 8 digits" });
+    }
+
+
     const myCloud = await cloudinary.v2.uploader.upload(avatar, {
         folder: "avatars",
         width: 150,
         crop: "scale"
     })
-    const user = await User.create({
+    user = await User.create({
         name, email, password,
-        avatar: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
-            // public_id: avatar.public_id,
-            // url: avatar.url,
-        }
+        avatar: { public_id: myCloud.public_id, url: myCloud.secure_url,}
     })
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -54,7 +63,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
     if (!isPasswordMatched) {
-        return next(new ErrorHandler("Invalid email or password...hehe", 400));
+        return next(new ErrorHandler("Invalid email or password", 400));
     }
 
     // const token = jwt.sign({_id:user._id}, process.env.JWT_SECRET, {

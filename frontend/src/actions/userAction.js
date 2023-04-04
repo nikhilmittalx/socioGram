@@ -16,7 +16,7 @@ export const login = (email, password) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: "LoginFailure",
-            payload: error,
+            payload: error.response.data.message,
         })
     }
 }
@@ -26,7 +26,7 @@ export const logout = () => async (dispatch) => {
             type: "LogoutRequest"
         })
 
-        const { data } = await axios.get("/api/v1/logouta")
+        const { data } = await axios.get("/api/v1/logout")
 
         dispatch({
             type: "LogoutSuccess",
@@ -35,7 +35,7 @@ export const logout = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: "LogoutFailure",
-            payload: error,
+            payload: error.response.data.message,
         })
     }
 }
@@ -55,7 +55,7 @@ export const signUp = (userData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: "RegisterFailure",
-            payload: error,
+            payload: error.response.data.message,
         })
     }
 }
@@ -76,7 +76,7 @@ export const loadUser = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: "LoadFailure",
-            payload: error,
+            payload: error.response.data.message,
         })
     }
 }
@@ -268,3 +268,9 @@ export const deleteMyProfile = () => async (dispatch) => {
       });
     }
 };
+
+// Clearing Errors
+export const clearErrors = () => async (dispatch) => {
+    dispatch({ type: "clearErrors" });
+  };
+  

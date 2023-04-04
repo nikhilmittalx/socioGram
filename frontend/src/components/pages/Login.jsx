@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../actions/userAction";
+import { clearErrors, login } from "../../actions/userAction";
 
 function Login() {
   const alert = useAlert();
@@ -28,10 +28,9 @@ function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (error) {
-      console.log(error)
-      alert.error(error);
-      // dispatch(clearErrors());
+    if(error) {
+      // alert.error(error);
+      dispatch(clearErrors());
     }
     if (isAuthenticated) {
       navigate("/");
