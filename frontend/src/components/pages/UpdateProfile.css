@@ -1,0 +1,72 @@
+.updateProfile {
+  /* min-height: 100vh; */
+  /* background-image: linear-gradient(to right, #fff5bc, #cec1ff); */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 2vmax; */
+  box-sizing: border-box;
+}
+
+.updateProfileForm {
+  background-color: white;
+  width: 50%;
+  border-radius: 30px;
+  box-sizing: border-box;
+  padding: 1vmax;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.updateProfileInputs {
+  box-sizing: border-box;
+  padding: 1vmax 3vmax;
+  /* width: 100%; */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin: 8px;
+  font: 100 1rem "Roboto", sans-serif;
+  outline: none;
+}
+
+.updateProfileForm > input[type="file"] {
+  border-radius: 30px;
+  margin: 9px;
+}
+
+.updateProfileForm > input[type="file"]::-webkit-file-upload-button {
+  /* background-color: #1976D2; */
+  color: #1976D2;
+  width: 100%;
+  padding: 0.8vmax;
+  border-radius: 6px;
+  border: none;
+  font: 100 1.2rem "Roboto", sans-serif;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 420px) {
+  .updateProfile{
+    width: 70vw;
+  }
+  .updateProfileForm {
+    width: 100%;
+  }
+
+  .updateProfileForm > input {
+    padding: 2vw 5vw;
+    margin: 8px;
+    font: 100 1rem "Roboto", sans-serif;
+    margin: 4vw;
+  }
+
+  .updateProfileForm > input[type="file"] {
+    width: 100%;
+  }
+
+  .updateProfileForm > input[type="file"]::-webkit-file-upload-button {
+    width: 70%;
+  }
+}

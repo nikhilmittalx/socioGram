@@ -1,0 +1,19 @@
+.homeUser {
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.507);
+    /* justify-content: space-between; */
+  }
+  
+  .homeUser img {
+    height: 2.2vmax;
+    width: 2.2vmax;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 0.5vmax;
+    border-radius: 100%;
+    border: 3px solid rgb(255, 201, 201);
+  }
+  
+
+
