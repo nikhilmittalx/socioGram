@@ -29,13 +29,14 @@ function Login() {
 
   useEffect(() => {
     if(error) {
-      // alert.error(error);
+      alert.error(error);
+      // ye isiliye hta dia...vrna 2 bar "Please login first" aa rha tha
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
       navigate("/");
     }
-  }, [isAuthenticated, error, navigate, alert]);
+  }, [isAuthenticated, error, navigate, alert, dispatch]);
 
   const HandlerLoginForm = async (e) => {
     e.preventDefault();

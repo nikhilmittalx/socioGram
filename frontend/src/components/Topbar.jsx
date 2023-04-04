@@ -47,6 +47,7 @@ function Topbar() {
   useEffect(() => {
     if (error) {
       console.log(error);
+      alert.error(error);
       dispatch({ type: "clearErrors" });
     }
     if (message) {
