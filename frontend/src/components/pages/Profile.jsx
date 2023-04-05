@@ -66,17 +66,38 @@ const Profile = () => {
             </div>
 
             <div class="profile-user-settings">
-              <h1 class="profile-user-name">{user.name}</h1>
+              <h1 class="profile-user-name">{user.username}</h1>
 
               {myProfile ? (
                 <div class="profile-edit-btn">Edit Profile</div>
-              ) : null}
+              ) : (
+                <div class="profile-edit-btn" style={{"border":"none"}}>
+                  <Button
+                    variant="contained"
+                    className="followBtn"
+                    onClick={followHandler}
+                  >
+                    {" "}
+                    {following ? "Unfollow" : "Follow"}
+                  </Button>
+                </div>
+              )}
 
               {myProfile ? (
                 <div class="profile-settings-btn">
                   <i class="fas fa-cog"></i>
                 </div>
               ) : null}
+            </div>
+
+            <div className="profile-stats">
+              <div className="profile-bio">
+                <h3 style={{ "font-weight": "500" }}>{user.name}</h3>
+                <p>
+                  <span className="profile-real-name"></span>
+                  {user.bio}
+                </p>
+              </div>
             </div>
 
             <div class="profile-stats">
@@ -100,13 +121,7 @@ const Profile = () => {
               </ul>
             </div>
 
-            {/* <div class="profile-bio">
-              <p>
-                <span class="profile-real-name"> 
-                </span> Good at fake smiling :) <br></br> 📷✈️🏕️
-              </p>
-            </div> */}
-            {myProfile ? null : (
+            {/* {myProfile ? null : (
               <Button
                 variant="contained"
                 className="followBtn"
@@ -115,7 +130,7 @@ const Profile = () => {
                 {" "}
                 {following ? "Unfollow" : "Follow"}
               </Button>
-            )}
+            )} */}
           </div>
         </div>
       )}

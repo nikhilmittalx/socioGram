@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
         required: [true, "Please enter your name"],
         maxLength: [30, "Name cannot exceed 30 characters"],
     },
+    username: {
+        type: String,
+        required: [true, "Please enter your username"],
+        unique: [true, "Username already exists"],
+    },
     email: {
         type: String,
         required: [true, "Please enter your email"],
@@ -22,16 +27,20 @@ const userSchema = new mongoose.Schema({
         minLength: [8, "Password must be greater than 8 characters"],
         select: false,  // select: false makes field values not accessible using "this"
     },
+    bio: {
+        type: String,
+        maxLength: [30, "Bio cannot exceed 30 characters"],
+    },
     avatar: {
         public_id:{
             type:String,
             required:true,
-            default:"publicId"
+            default:"defaultavatar_kqhdwp"
         },
         url:{
             type:String,
             required:true,
-            default:"https://res.cloudinary.com/doqgoey64/image/upload/v1680349229/avatars/defaultavatar_mvfh3w.png"
+            default:"https://res.cloudinary.com/doqgoey64/image/upload/v1680688089/avatars/defaultavatar_kqhdwp.png"
         }
     },
     posts: [

@@ -9,10 +9,12 @@ const cloudinary = require("cloudinary");
 const Post = require("../models/postModel");
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-    const { name, email, password, avatar } = req.body;
+    const { name,username, email, password, avatar } = req.body;
 
-    let user = await User.findOne({ email });
-    if (user) {
+    
+    let ExistingUsername = await User.findOne({ username });
+    let ExistingUser = await User.findOne({ email });
+    if (ExistingUser || ExistingUsername) {
       return res
         .status(400)
         .json({ success: false, message: "User already exists" });
@@ -22,21 +24,31 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         .status(400)
         .json({ success: false, message: "Password must be atleast 8 digits" });
     }
-
-
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "avatars",
-        width: 150,
-        crop: "scale"
+    let myCloud;
+    if(avatar){
+        myCloud = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale"
+        })
+    }else{
+        myCloud = {
+            public_id: "avatars/defaultavatar_kqhdwp",
+            url: "https://res.cloudinary.com/doqgoey64/image/upload/v1680688089/avatars/defaultavatar_kqhdwp.png",
+        }
+    }
+    const user = await User.create({
+        name,username, email, password,
+        avatar: { 
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        },
     })
-    user = await User.create({
-        name, email, password,
-        avatar: { public_id: myCloud.public_id, url: myCloud.secure_url,}
-    })
-
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE
-    })
+    
+    const token = user.getJWTToken();
+    // const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    //     expiresIn: process.env.JWT_EXPIRE
+    // })
 
     const options = {
         httpOnly: true,
@@ -114,38 +126,65 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 })
 
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
-    const newUserData = {
-        name: req.body.name,
-        email: req.body.email
+    // const newUserData = {
+    //     name: req.body.name,
+    //     email: req.body.email,
+    //     bio: req.body.bio
+    // }
+    // // for profile pic
+    // if (req.body.avatar !== "") {
+    //     const user = await User.findById(req.user.id);
+        
+    //     const imageId = user.avatar.public_id;
+        
+    //     await cloudinary.v2.uploader.destroy(imageId);
+        
+    //     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    //         folder: "avatars",
+    //         width: 150,
+    //         crop: "scale",
+    //     });
+        
+    //     newUserData.avatar = {
+    //         // public_id: user.avatar.public_id,
+    //         // url: user.avatar.url,
+    //         public_id: myCloud.public_id,
+    //         url: myCloud.secure_url,
+    //     };
+    // }
+
+    // const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    //     new: true,
+    //     runValidators: true,
+    //     useFindAndModify: true,
+    // })
+    const user = await User.findById(req.user._id);
+
+    const { name, email, avatar, bio } = req.body;
+
+    if (name) {
+      user.name = name;
     }
-    // for profile pic
-    if (req.body.avatar !== "") {
-        const user = await User.findById(req.user.id);
-
-        const imageId = user.avatar.public_id;
-
-        await cloudinary.v2.uploader.destroy(imageId);
-
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-            folder: "avatars",
-            width: 150,
-            crop: "scale",
-        });
-
-        newUserData.avatar = {
-            // public_id: user.avatar.public_id,
-            // url: user.avatar.url,
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
-        };
+    if (email) {
+      user.email = email;
+    }
+    if(bio){
+        user.bio = bio;
     }
 
+    if (avatar) {
+      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
 
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: true,
-    })
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+      });
+      user.avatar.public_id = myCloud.public_id;
+      user.avatar.url = myCloud.secure_url;
+    }
+    await user.save();
+
     res.status(200).json({
         success: true,
         user
@@ -258,10 +297,12 @@ exports.deleteProfile = catchAsyncError(async (req, res, next) => {
     const followers = user.followers;
     const following = user.following;
 
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     await user.deleteOne();
 
     for (let i = 0; i < posts.length; i++) {
         const post = await Post.findById(posts[i]);
+        await cloudinary.v2.uploader.destroy(post.image.public_id);
         await post.deleteOne();
     }
     // is user ko sbki following aur followers me se bhi delete krna h
@@ -410,7 +451,7 @@ exports.getUserPosts = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({
-            name: { $regex: req.query.name, $options: "i" },
+            username: { $regex: req.query.username, $options: "i" },
             _id: { $ne: req.user._id }
         }).populate("followers");
 

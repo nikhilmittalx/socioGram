@@ -179,14 +179,14 @@ export const followAndUnfollowUser = (id) => async (dispatch) => {
 
 
 export const getAllUsers =
-    (name = "") =>
+    (username = "") =>
         async (dispatch) => {
             try {
                 dispatch({
                     type: "allUsersRequest",
                 });
 
-                const { data } = await axios.get(`/api/v1/users?name=${name}`);
+                const { data } = await axios.get(`/api/v1/users?username=${username}`);
                 //   const { data } = await axios.get(`/api/v1/users`);
                 dispatch({
                     type: "allUsersSuccess",
@@ -221,7 +221,7 @@ export const getSuggestedUsers = (name="") =>
         };
 
 
-export const updateProfile = (name, email, avatar) => async (dispatch) => {
+export const updateProfile = (name, email, avatar, bio) => async (dispatch) => {
     try {
         dispatch({
             type: "updateProfileRequest",
@@ -229,7 +229,7 @@ export const updateProfile = (name, email, avatar) => async (dispatch) => {
 
         const { data } = await axios.put(
             "/api/v1/update/profile",
-            { name, email, avatar },
+            { name, email, avatar,bio },
             {
                 headers: {
                     "Content-Type": "application/json",

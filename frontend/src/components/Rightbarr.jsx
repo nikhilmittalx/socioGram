@@ -39,7 +39,7 @@ const Rightbarr = () => {
                       style={{ cursor: "pointer" }}
                       onClick={() => navigate(`/user/${user._id}`)}
                     >
-                      {user.name}
+                      {user.username}
                       <br />
                       <span style={{ "font-size": "12px" }}>
                         {/* Followed By{" "} */}

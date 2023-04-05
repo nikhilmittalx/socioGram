@@ -14,7 +14,7 @@ router.route("/password/update").put(updatePassword);
 router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);
 
-router.route("/update/profile").put(updateProfile)
+router.route("/update/profile").put(isAuthenticated, updateProfile)
 
 router.route("/follow/:id").get(isAuthenticated, followUser)
 router.route("/user/:id").get(isAuthenticated, getUserProfile)

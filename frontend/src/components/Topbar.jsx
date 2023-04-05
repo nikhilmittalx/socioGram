@@ -40,6 +40,7 @@ function Topbar() {
   const submitHandler = async (e) => {
     e.preventDefault();
     await dispatch(createNewPost(caption, image));
+    setShowAddPost(false);
     dispatch(loadUser());
     dispatch(getMyPosts());
   };

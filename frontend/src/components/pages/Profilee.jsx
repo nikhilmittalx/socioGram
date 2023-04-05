@@ -19,7 +19,7 @@ const Profilee = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { posts, loading } = useSelector((state) => state.myPosts);
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const {
     loading: updateLoading,
@@ -36,6 +36,7 @@ const Profilee = () => {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
+  const [bio, setBio] = useState(user.bio);
   const [avatar, setAvatar] = useState("");
   const [avatarPrev, setAvatarPrev] = useState(user.avatar.url);
 
@@ -56,12 +57,13 @@ const Profilee = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await dispatch(updateProfile(name, email, avatar));
+    await dispatch(updateProfile(name, email, avatar, bio));
+    setEditToggle(false);
     dispatch(loadUser());
   };
   const deleteProfileHandler = async () => {
-      await dispatch(deleteMyProfile());
-      dispatch(logout());
+    await dispatch(deleteMyProfile());
+    dispatch(logout());
   };
 
   return (
@@ -72,9 +74,9 @@ const Profilee = () => {
           <div className="profile-image">
             <img src={user.avatar.url} alt="" />
           </div>
-          
+
           <div className="profile-user-settings">
-            <h1 className="profile-user-name">{user.name}</h1>
+            <h1 className="profile-user-name">{user.username}</h1>
 
             <div
               className="profile-edit-btn"
@@ -83,12 +85,20 @@ const Profilee = () => {
               Edit Profile
             </div>
 
-
             <div
               className="profile-settings-btn"
               onClick={() => setShowConfirmDelete(!showConfirmDelete)}
             >
-              <i className="fas fa-trash" ></i>
+              <i className="fas fa-trash"></i>
+            </div>
+          </div>
+
+          <div className="profile-stats">
+            <div className="profile-bio">
+              <h3 style={{"font-weight":"500"}}>{user.name}</h3>
+              <p>
+                <span className="profile-real-name"></span> {user.bio}
+              </p>
             </div>
           </div>
 
@@ -113,12 +123,7 @@ const Profilee = () => {
             </ul>
           </div>
 
-          {/* <div className="profile-bio">
-              <p>
-                <span className="profile-real-name"> 
-                </span> Good at fake smiling :) <br></br> 📷✈️🏕️
-              </p>
-            </div> */}
+          
         </div>
       </div>
       {/* </header> */}
@@ -229,25 +234,39 @@ const Profilee = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <input
+                type="text"
+                placeholder="Bio"
+                className="updateProfileInputs"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
 
               <Button disabled={updateLoading} type="submit">
                 Update
               </Button>
-              
             </form>
           </div>
         </div>
       </Dialog>
 
-
-
-      <Dialog open={showConfirmDelete} onClose={() => setShowConfirmDelete(!showConfirmDelete)}>
-        <div className="DialogBox" style={{"height":"150px",}}>
-          <Typography variant="h6" style={{"font-size":"1.25rem"}}>You're about to delete your account. Go ahead?</Typography>
+      <Dialog
+        open={showConfirmDelete}
+        onClose={() => setShowConfirmDelete(!showConfirmDelete)}
+      >
+        <div className="DialogBox" style={{ height: "150px" }}>
+          <Typography variant="h6" style={{ "font-size": "1.25rem" }}>
+            You're about to delete your account. Go ahead?
+          </Typography>
           {/* <Typography variant="h6">Are you sure you want to delete your account ?</Typography> */}
-          <div className="btns" style={{"display":"flex", "margin-top":"10px"}}>
-            <Button onClick={deleteProfileHandler} style={{"color":"red"}}>Yes</Button>
-            <Button onClick={() => setShowConfirmDelete(false)} >Cancel</Button>
+          <div
+            className="btns"
+            style={{ display: "flex", "margin-top": "10px" }}
+          >
+            <Button onClick={deleteProfileHandler} style={{ color: "red" }}>
+              Yes
+            </Button>
+            <Button onClick={() => setShowConfirmDelete(false)}>Cancel</Button>
           </div>
         </div>
       </Dialog>

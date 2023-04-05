@@ -12,7 +12,7 @@ import Profile from "./components/pages/Profile";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { loadUser } from "./actions/userAction";
+import { clearErrors, loadUser } from "./actions/userAction";
 import Profilee from "./components/pages/Profilee";
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
 
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(clearErrors())
   }, [dispatch]);
   const { isAuthenticated } = useSelector((state) => state.user);
 

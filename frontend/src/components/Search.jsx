@@ -28,7 +28,7 @@ function Search({ data, hideSearch }) {
                 </div>
 
                 <div className="userLeft">
-                  <span>{u.name}</span>
+                  <span>{u.username}</span>
                 </div>
               </div>
             </Link>

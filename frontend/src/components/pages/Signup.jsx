@@ -14,10 +14,12 @@ function Signup() {
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   
   const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("https://res.cloudinary.com/doqgoey64/image/upload/v1680349229/avatars/defaultavatar_mvfh3w.png");
+  const [avatarPreview, setAvatarPreview] = useState("https://res.cloudinary.com/doqgoey64/image/upload/v1680688089/avatars/defaultavatar_kqhdwp.png");
 
   const { isAuthenticated, error } = useSelector((state)=>state.user)
 
@@ -35,12 +37,16 @@ function Signup() {
 
   const registerHandler = async (e) => {
     e.preventDefault();
-    const userData = { name, email, password, avatar };
+    if(password!==confirmPassword){
+      return alert.error("Password doesn't match")
+    }
+    const userData = { name,username, email, password, avatar };
     dispatch(signUp(userData));
   };
 
   useEffect(()=>{
     if(error) {
+      // cannot read properties of null aa rha jab signup ke bad refresh kr rhe
       alert.error(error);
       dispatch(clearErrors());
     }
@@ -72,6 +78,16 @@ function Signup() {
                 />
                 <input
                   onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                  placeholder="Username"
+                  type="text"
+                  required
+                  className="signupInput"
+                  value={username}
+                />
+                <input
+                  onChange={(e) => {
                     setEmail(e.target.value);
                   }}
                   placeholder="Email"
@@ -90,6 +106,17 @@ function Signup() {
                   minLength="6"
                   className="signupInput"
                   value={password}
+                />
+                <input
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                  placeholder="Confirm Password"
+                  type="password"
+                  required
+                  minLength="6"
+                  className="signupInput"
+                  value={confirmPassword}
                 />
                 <div id="registerImage">
                   <img src={avatarPreview} alt="Avatar Preview" />
