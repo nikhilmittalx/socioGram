@@ -184,3 +184,14 @@ exports.deleteComment = catchAsyncError(async(req,res,next)=>{
     }
 
 })
+
+exports.openPost = catchAsyncError(async(req,res,next)=>{
+    const post = await Post.findById(req.params.id).populate("comments likes owner comments.user");
+
+    if(!post) return next(new ErrorHandler("post not found", 404))
+
+    res.status(200).json({
+        success:true,
+        post,
+    })
+})

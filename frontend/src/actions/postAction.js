@@ -71,3 +71,20 @@ export const createNewPost = (caption, image) => async(dispatch) => {
         })
     }
 }
+export const openPoste = (id) => async(dispatch) =>{
+    try {
+        dispatch({type:"openPostRequest"})
+
+        const {data} = await axios.get(`/api/v1/openPost/${id}`);
+        
+        dispatch({
+            type:"openPostSuccess",
+            payload:data.post
+        })
+    } catch (error) {
+        dispatch({
+            type:"openPostFailure",
+            payload:error.response.data.message
+        })
+    }
+}

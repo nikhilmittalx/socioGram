@@ -66,6 +66,11 @@ const Profilee = () => {
     dispatch(logout());
   };
 
+  // const {poste} = useSelector((state)=>state.openPost)
+  // useEffect(()=>{
+
+  // }, [dispatch]) 
+
   return (
     <>
       <Topbar />
@@ -138,9 +143,15 @@ const Profilee = () => {
                 posts.map((post) => (
                   <ProfilePost
                     key={post._id}
+                    postId={post._id}
+                    caption={post.caption}
                     postImage={post.image.url}
                     likes={post.likes}
                     comments={post.comments}
+                    ownerImage={post.owner.avatar.url}
+                    ownerUsername={post.owner.username}
+                    ownerId={post.owner._id}
+                    isAccount={true}
                   />
                 ))
               ) : (
@@ -156,14 +167,14 @@ const Profilee = () => {
         onClose={() => setFollowersToggle(!followersToggle)}
       >
         <div className="DialogBox">
-          <Typography variant="h6">Followers</Typography>
+          <Typography variant="h5">Followers</Typography>
 
           {user && user.followers.length > 0 ? (
             user.followers.map((follower) => (
               <User
                 key={follower._id}
                 userId={follower._id}
-                name={follower.name}
+                username={follower.username}
                 avatar={follower.avatar.url}
               />
             ))
@@ -180,14 +191,14 @@ const Profilee = () => {
         onClose={() => setFollowingToggle(!followingToggle)}
       >
         <div className="DialogBox">
-          <Typography variant="h6">Following</Typography>
+          <Typography variant="h5">Following</Typography>
 
           {user && user.following.length > 0 ? (
             user.following.map((follow) => (
               <User
                 key={follow._id}
                 userId={follow._id}
-                name={follow.name}
+                username={follow.username}
                 avatar={follow.avatar.url}
               />
             ))

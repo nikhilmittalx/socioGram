@@ -53,7 +53,7 @@ function Signup() {
     if(isAuthenticated){
       navigate("/")
     }
-  }, [navigate, isAuthenticated, dispatch, error])
+  }, [navigate, isAuthenticated, dispatch, error, alert])
 
 
   return (

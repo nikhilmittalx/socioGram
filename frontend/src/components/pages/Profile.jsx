@@ -1,32 +1,42 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dialog, Typography } from "@mui/material";
+import { Avatar, Button, Dialog, Typography } from "@mui/material";
 
 import "./Profilee.css";
 import Topbar from "../Topbar";
 import ProfilePost from "../ProfilePost";
 import {
+  deleteMyProfile,
   followAndUnfollowUser,
   getUserPosts,
   getUserProfile,
+  loadUser,
+  logout,
+  updateProfile,
 } from "../../actions/userAction";
 import User from "../User";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../Loader/Loader";
+
+
+
 
 const Profile = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
+
+  
+  const [followingToggle, setFollowingToggle] = useState(false);
+  const [followersToggle, setFollowersToggle] = useState(false);
+  const [following, setFollowing] = useState(false);
+  const [myProfile, setMyProfile] = useState(false);
 
   const { user } = useSelector((state) => state.userProfile);
   const { user: me } = useSelector((state) => state.user);
   const { posts, loading } = useSelector((state) => state.userPosts);
 
-  const [followingToggle, setFollowingToggle] = useState(false);
-  const [followersToggle, setFollowersToggle] = useState(false);
 
-  const [following, setFollowing] = useState(false);
-  const [myProfile, setMyProfile] = useState(false);
 
   const followHandler = async () => {
     setFollowing(!following);
@@ -42,6 +52,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (me._id === params.id) {
+      navigate("/account")
       setMyProfile(true);
     }
     if (user) {
@@ -54,6 +65,8 @@ const Profile = () => {
       });
     }
   }, [user, me._id, params.id]);
+
+
 
   return (
     <>
@@ -69,9 +82,13 @@ const Profile = () => {
               <h1 class="profile-user-name">{user.username}</h1>
 
               {myProfile ? (
-                <div class="profile-edit-btn">Edit Profile</div>
+                <div
+                  className="profile-edit-btn"
+                >
+                  Edit Profile
+                </div>
               ) : (
-                <div class="profile-edit-btn" style={{"border":"none"}}>
+                <div class="profile-edit-btn" style={{ border: "none" }}>
                   <Button
                     variant="contained"
                     className="followBtn"
@@ -84,8 +101,10 @@ const Profile = () => {
               )}
 
               {myProfile ? (
-                <div class="profile-settings-btn">
-                  <i class="fas fa-cog"></i>
+                <div
+                  className="profile-settings-btn"
+                >
+                  <i className="fas fa-trash"></i>
                 </div>
               ) : null}
             </div>
@@ -145,9 +164,15 @@ const Profile = () => {
                 posts.map((post) => (
                   <ProfilePost
                     key={post._id}
+                    postId={post._id}
+                    caption={post.caption}
                     postImage={post.image.url}
                     likes={post.likes}
                     comments={post.comments}
+                    ownerImage={post.owner.avatar.url}
+                    ownerUsername={post.owner.username}
+                    ownerId={post.owner._id}
+                    isAccount={myProfile}
                   />
                 ))
               ) : (
@@ -163,14 +188,14 @@ const Profile = () => {
         onClose={() => setFollowersToggle(!followersToggle)}
       >
         <div className="DialogBox">
-          <Typography variant="h4">Followers</Typography>
+          <Typography variant="h5">Followers</Typography>
 
           {user && user.followers.length > 0 ? (
             user.followers.map((follower) => (
               <User
                 key={follower._id}
                 userId={follower._id}
-                name={follower.name}
+                username={follower.username}
                 avatar={follower.avatar.url}
               />
             ))
@@ -187,14 +212,14 @@ const Profile = () => {
         onClose={() => setFollowingToggle(!followingToggle)}
       >
         <div className="DialogBox">
-          <Typography variant="h4">Following</Typography>
+          <Typography variant="h5">Following</Typography>
 
           {user && user.following.length > 0 ? (
             user.following.map((follow) => (
               <User
                 key={follow._id}
                 userId={follow._id}
-                name={follow.name}
+                username={follow.username}
                 avatar={follow.avatar.url}
               />
             ))
@@ -205,6 +230,8 @@ const Profile = () => {
           )}
         </div>
       </Dialog>
+
+
     </>
   );
 };

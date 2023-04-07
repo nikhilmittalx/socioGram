@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { clearErrors, loadUser } from "./actions/userAction";
 import Profilee from "./components/pages/Profilee";
+import PostOpen from "./components/PostOpen";
 
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,10 @@ function App() {
           <Route
             path="/account"
             element={isAuthenticated ? <Profilee /> : <Signup />}
+          />
+          <Route
+            path="/openPost/:id"
+            element={isAuthenticated ? <PostOpen /> : <Signup />}
           />
 
           {/* <Route

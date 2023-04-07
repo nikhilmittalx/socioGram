@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import "./postss.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addCommentOnPost, likePost } from "../actions/postAction";
+import { addCommentOnPost, likePost, openPoste } from "../actions/postAction";
 import { Typography, Dialog } from "@mui/material";
-import { getFollowingPosts } from "../actions/userAction";
+import { getFollowingPosts, getMyPosts } from "../actions/userAction";
 import User from "./User";
 import CommentCard from "./CommentCard";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ const Postss = ({
   ownerImage,
   ownerName,
   ownerId,
-  createdAt,
+  // createdAt,
   isDelete = false,
   isAccount = false,
 }) => {
@@ -38,10 +38,10 @@ const Postss = ({
   const handleLike = async () => {
     setLiked(!liked);
     await dispatch(likePost(postId));
-
+    dispatch(openPoste(postId))
     // isse real time me likes update honge
     if (isAccount) {
-      console.log("apni posts");
+      dispatch(getMyPosts());
     } else {
       dispatch(getFollowingPosts());
     }
@@ -51,8 +51,9 @@ const Postss = ({
     console.log("adding comment");
     e.preventDefault();
     await dispatch(addCommentOnPost(postId, commentValue));
+    dispatch(openPoste(postId))
     if (isAccount) {
-      console.log("apni posts");
+      dispatch(getMyPosts());
     } else {
       dispatch(getFollowingPosts());
     }
@@ -97,13 +98,6 @@ const Postss = ({
           <div className="bottom">
             <div className="actionBtns">
               <div className="left">
-                {/* <Button onClick={handleLike}>
-                  {liked ? (
-                    <Favorite style={{ color: "red" }} />
-                  ) : (
-                    <FavoriteBorder />
-                  )}
-                </Button> */}
 
                 <span className="heart" onClick={handleLike}>
                   <span>
@@ -135,8 +129,7 @@ const Postss = ({
                   </span>
                 </span>
 
-                <svg
-                  aria-label="Comment"
+                <svg aria-label="Comment"
                   className="_8-yf5"
                   color="#262626"
                   fill="#262626"
@@ -159,25 +152,6 @@ const Postss = ({
                   ></path>
                 </svg>
 
-                {/* <svg
-                  aria-label="Share Post"
-                  className="_8-yf5"
-                  color="#262626"
-                  fill="#262626"
-                  height="24"
-                  role="img"
-                  viewBox="0 0 48 48"
-                  width="24"
-                >
-                  <path
-                    d="M47.8 3.8c-.3-.5-.8-.8-1.3-.8h-45C.9 3.1.3
-										3.5.1 4S0 5.2.4 5.7l15.9 15.6 5.5 22.6c.1.6.6
-										1 1.2 1.1h.2c.5 0 1-.3
-										1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2
-										6.1h35.5L18 18.7 5.2 6.1zm18.7
-										33.6l-4.4-18.4L42.4 8.6 23.9 39.7z"
-                  ></path>
-                </svg> */}
               </div>
 
               <div className="right">
@@ -207,28 +181,12 @@ const Postss = ({
               {likes.length} likes
             </p>
             {/* </a> */}
-            <a href="#">
+            {/* <a href="#"> */}
               <p className="message">
                 <b>{ownerName}</b> <text className="caption">{caption}</text>
               </p>
-            </a>
+            {/* </a> */}
 
-            {/* {comments.length > 0 ? (
-              comments.map((item) => (
-                <CommentCard
-                  userId={item.user._id}
-                  name={item.user.name}
-                  avatar={item.user.avatar.url}
-                  comment={item.comment}
-                  commentId={item._id}
-                  key={item._id}
-                  postId={postId}
-                  isAccount={isAccount}
-                />
-              ))
-            ) : (
-              null
-            )} */}
 
             {comments.length ? (
               // <a href="#">
@@ -285,7 +243,7 @@ const Postss = ({
             <User
               key={like._id}
               userId={like._id}
-              name={like.name}
+              username={like.username}
               avatar={like.avatar.url}
             />
           ))}
@@ -334,23 +292,11 @@ const Postss = ({
               /> */}
             </div>
 
-            {/* <input
-              type="text"
-              value={commentValue}
-              onChange={(e) => setCommentValue(e.target.value)}
-              placeholder="Add a comment..."
-              required
-            />
-
-            <Button type="submit" variant="contained">
-              Add
-            </Button> */}
-
             {comments.length > 0 ? (
               comments.map((item) => (
                 <CommentCard
                   userId={item.user._id}
-                  name={item.user.name}
+                  username={item.user.username}
                   avatar={item.user.avatar.url}
                   comment={item.comment}
                   commentId={item._id}

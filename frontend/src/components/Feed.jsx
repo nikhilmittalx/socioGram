@@ -29,9 +29,7 @@ function Feed() {
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
+      {/* {loading ? ( <Loader /> ) : ( */}
         <Fragment>
           <FeedContainer>
             {/* <Postss/> */}
@@ -60,7 +58,7 @@ function Feed() {
             </div>
           </FeedContainer>
         </Fragment>
-      )}
+      {/* )} */}
     </>
   );
 }

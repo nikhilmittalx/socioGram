@@ -195,6 +195,7 @@
 .imgBx {
     position: relative;
     width: 100%;
+    /* height: fit-content; */
     min-height: 400px;
     margin: 10px 0 15px;
 }
@@ -338,6 +339,7 @@ a {
     .imgBx {
       position: relative;
       width: 100%;
+      /* height: auto; */
       min-height: 400px;
       margin: 10px 0 15px;
     }

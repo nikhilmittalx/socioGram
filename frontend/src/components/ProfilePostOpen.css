@@ -1,0 +1,43 @@
+.postOpen{
+    display: flex;
+    overflow-y: hidden;
+}
+
+.imgBox{
+    width: 50%;
+    display: flex;
+    /* margin: 0 auto ;
+    display: inline-flex; */
+    height: 100%;
+    background: black;
+}
+.imgBox img{
+    width: 100%;
+    /* position: fixed; */
+    margin: auto;
+}
+.rightBox{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.rightTop{
+    top: 0;
+    /* position: absolute; */
+    width: 100%;
+    margin-bottom: 103.6px;
+}
+.rightTop::-webkit-scrollbar {
+    width: 0;
+}
+
+.rightBottom{
+    background: #fff;
+    z-index: 99;
+    bottom: 0;
+    position: absolute;
+    width: 50%;
+}
+.middle{
+    top: auto;
+}

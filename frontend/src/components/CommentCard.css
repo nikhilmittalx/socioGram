@@ -16,13 +16,13 @@
   .commentUser img {
     /* max-height: 30px;
     max-width: 30px; */
-    min-height: 35px;
-    min-width: 35px;
+    min-height: 30px;
+    min-width: 30px;
     height: 2vmax;
     width: 2vmax;
     margin: 0.8vmax;
     border-radius: 100%;
-    border: 3px solid rgb(255, 201, 201);
+    /* border: 3px solid rgb(255, 201, 201); */
   }
   
   /* .commentUser > a:hover {
